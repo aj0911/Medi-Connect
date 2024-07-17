@@ -18,6 +18,7 @@ const doctorSchema = new mongoose.Schema({
     type: String,
     required: [true, "Password is Mandatory"],
     maxlength: 255,
+    select:false
   },
   Specialty: {
     type: String,
@@ -27,12 +28,12 @@ const doctorSchema = new mongoose.Schema({
 });
 
 //creating model functions
-doctorSchema.pre("save", async (next) => {
+doctorSchema.pre("save", async function(next) {
   if (!this.isModified("PasswordHash")) next();
   this.PasswordHash = await bcrypt.hash(this.PasswordHash, 10);
 });
 
-doctorSchema.methods.comparePassword = async (pass) =>
-  await bcrypt.compare(pass, this.PasswordHash);
-
+doctorSchema.methods.comparePassword = async function(pass){
+  return await bcrypt.compare(pass,this.PasswordHash);
+}
 module.exports = mongoose.model("DoctorModel", doctorSchema);

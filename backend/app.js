@@ -4,7 +4,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const fileUpload = require("express-fileupload");
 const cookieParser = require("cookie-parser");
-const ErrorMiddlewares = require('./Middlewares/Error')
+const ErrorMiddlewares = require("./Middlewares/Error");
 
 //Making objects
 const app = express();
@@ -23,13 +23,18 @@ app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 app.use(fileUpload());
 
 //Importing router
-const AppRouter = require('./Router/AppRouter')
+const DoctorRouter = require("./Router/DoctorRouter");
+const PatientRouter = require("./Router/PatientRouter");
+const PDFRouter = require("./Router/PDFRouter");
+const DoctorPatientRouter = require("./Router/DoctorPatientRouter");
 
 //Using Routers
-app.use(AppRouter)
+app.use("/api/v1", DoctorRouter);
+app.use("/api/v1", PatientRouter);
+app.use("/api/v1", PDFRouter);
+app.use("/api/v1", DoctorPatientRouter);
 
 //Using middlewares for erros
-app.use(ErrorMiddlewares)
-
+app.use(ErrorMiddlewares);
 
 module.exports = app;
